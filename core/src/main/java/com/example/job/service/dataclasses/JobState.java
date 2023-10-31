@@ -2,6 +2,7 @@ package com.example.job.service.dataclasses;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -14,7 +15,10 @@ public class JobState {
   private int stepTotal;
 
   @JsonCreator
-  public JobState(String id, int stepState, int stepTotal) {
+  public JobState(
+      @JsonProperty("id") String id,
+      @JsonProperty("stepState") int stepState,
+      @JsonProperty("stepTotal") int stepTotal) {
     this.id = id;
     this.jobRunStatus = JobRunStatus.RUNNING;
     this.stepState = stepState;

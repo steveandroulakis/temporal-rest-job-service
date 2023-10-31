@@ -22,14 +22,12 @@ package io.temporal.samples.restjobservice;
 import com.example.job.service.web.ServerInfo;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowOptions;
-import io.temporal.samples.restjobservice.dataclasses.WorkflowParameterObj;
 import java.io.FileNotFoundException;
 import javax.net.ssl.SSLException;
 
 public class RestJobServiceRequester {
 
-  public static String runWorkflow(WorkflowParameterObj workflowParameterObj)
-      throws FileNotFoundException, SSLException {
+  public static String runWorkflow() throws FileNotFoundException, SSLException {
     // generate a random reference number
     String referenceNumber = generateReferenceNumber(); // random reference number
 
@@ -43,11 +41,11 @@ public class RestJobServiceRequester {
             .setWorkflowId(referenceNumber)
             .setTaskQueue(TASK_QUEUE)
             .build();
-    RestJobServiceWorkflow transferWorkflow =
+    RestJobServiceWorkflow restJobServiceWorkflow =
         client.newWorkflowStub(RestJobServiceWorkflow.class, options);
 
-    WorkflowClient.start(transferWorkflow::restJobService, workflowParameterObj);
-    System.out.printf("\n\nJob Created: $%s\n", workflowParameterObj.getJobData().getId());
+    WorkflowClient.start(restJobServiceWorkflow::restJobService);
+    System.out.printf("\n\nJob Run Created: %s\n", referenceNumber);
 
     return referenceNumber;
   }
@@ -55,17 +53,14 @@ public class RestJobServiceRequester {
   @SuppressWarnings("CatchAndPrintStackTrace")
   public static void main(String[] args) throws Exception {
 
-    //    WorkflowParameterObj params =
-    //        new WorkflowParameterObj(amountCents, ExecutionScenarioObj.HAPPY_PATH);
-    //
-    //    runWorkflow(params);
+    runWorkflow();
 
     System.exit(0);
   }
 
   private static String generateReferenceNumber() {
     return String.format(
-        "TRANSFER-%s-%03d",
+        "RUN-%s%03d",
         (char) (Math.random() * 26 + 'A')
             + ""
             + (char) (Math.random() * 26 + 'A')

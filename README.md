@@ -42,7 +42,13 @@ export TEMPORAL_REST_JOB_SERVICE_TASKQUEUE="RestJobService"
 ```
 
 ### Run a Workflow
+```bash
+./gradlew -q execute -PmainClass=io.temporal.samples.restjobservice.RestJobServiceRequester --console=plain
+```
+
+### Run a worker
+```bash
+./gradlew -q execute -PmainClass=io.temporal.samples.restjobservice.RestJobServiceWorker --console=plain
+```
 
 Note: Use a Java 18 SDK.
-
-Start a worker: TODO

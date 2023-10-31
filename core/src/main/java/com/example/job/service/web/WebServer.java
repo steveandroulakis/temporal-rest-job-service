@@ -53,7 +53,7 @@ public class WebServer {
             ctx.status(500);
           }
         });
-    ctx.json(newJob.getJobData()); // Respond with the Job ID
+    ctx.json(newJob.getJobData().getId()); // Respond with the Job ID
   }
 
   private static void getJobStatus(Context ctx) {

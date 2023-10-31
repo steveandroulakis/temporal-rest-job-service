@@ -2,6 +2,7 @@ package com.example.job.service.dataclasses;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.UUID;
@@ -9,13 +10,21 @@ import java.util.UUID;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class JobData {
   private String id;
+
+  @JsonProperty("type")
   private String type;
+
+  @JsonProperty("stepLength")
   private int stepLength;
+
+  @JsonProperty("steps")
   private int steps;
 
   @JsonCreator
-  public JobData(String type, int stepLength, int steps) {
-    this.id = this.generateId();
+  public JobData(
+      @JsonProperty("type") String type,
+      @JsonProperty("stepLength") int stepLength,
+      @JsonProperty("steps") int steps) {
     this.type = type;
     this.stepLength = stepLength;
     this.steps = steps;
@@ -29,6 +38,11 @@ public class JobData {
     } catch (JsonProcessingException e) {
       return super.toString();
     }
+  }
+
+  // generate ID static method
+  public static String generateId() {
+    return UUID.randomUUID().toString().substring(0, 6);
   }
 
   // getters and setters
@@ -63,9 +77,5 @@ public class JobData {
 
   public void setSteps(int steps) {
     this.steps = steps;
-  }
-
-  private String generateId() {
-    return UUID.randomUUID().toString().substring(0, 6);
   }
 }

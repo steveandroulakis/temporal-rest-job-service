@@ -19,6 +19,8 @@
 
 package io.temporal.samples.restjobservice;
 
+import com.example.job.service.dataclasses.JobData;
+import com.example.job.service.dataclasses.JobState;
 import io.temporal.activity.ActivityOptions;
 import io.temporal.samples.restjobservice.dataclasses.*;
 import io.temporal.workflow.Workflow;
@@ -36,13 +38,25 @@ public class RestJobServiceWorkflowImpl implements RestJobServiceWorkflow {
       Workflow.newActivityStub(RestJobActivities.class, options);
 
   @Override
-  public String restJobService(WorkflowParameterObj params) {
+  public JobState[] restJobService() {
 
-    // run activity
-    String jobStatus = restJobActivities.createJob(params.getJobData());
-    log.info("Job Status: " + jobStatus + "\n");
+    JobState[] jobStates = new JobState[1];
+
+    JobData jobAData = new JobData("jobA", 1, 10);
+
+    // run activity createJob
+    String jobAid = restJobActivities.createJob(jobAData);
+    log.info("Job Status from workflow: " + jobAid + "\n");
+
+    // run activity createJob
+    JobState jobAResult = restJobActivities.awaitJobCompletion(jobAid);
+    log.info("Job result from workflow: " + jobAResult + "\n");
+    log.info("Job result from workflow: " + jobAResult.getJobRunStatus() + "\n");
+
+    // add job to jobStates
+    jobStates[0] = jobAResult;
 
     log.info("Workflow Complete\n");
-    return "COMPLETE";
+    return jobStates;
   }
 }
