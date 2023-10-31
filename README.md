@@ -3,7 +3,8 @@
 The primary purpose of this PoC is to demonstrate the ability of  [Temporal](https://temporal.io) to integrate with legacy orchestration systems.
 
 ### TODO
-- write a workflow that uses the legacy job service
+- [X] Legacy Job Service
+- [ ] Temporal Workflow
 
 ## Legacy Workflow Orchestrator
 
