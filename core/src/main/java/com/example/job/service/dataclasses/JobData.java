@@ -41,8 +41,8 @@ public class JobData {
   }
 
   // generate ID static method
-  public static String generateId() {
-    return UUID.randomUUID().toString().substring(0, 6);
+  public static String generateId(String type) {
+    return type + "-" + UUID.randomUUID().toString().substring(0, 3);
   }
 
   // getters and setters

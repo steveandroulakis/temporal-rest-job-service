@@ -36,9 +36,7 @@ public class RestJobActivitiesImpl implements RestJobActivities {
 
   @Override
   public String createJob(JobData jobData) {
-    log.info("Activity createJob: " + jobData.getId() + "\n");
     String url = ServerInfo.getWebServerURL() + "/job";
-    log.info("\n\nURL: " + url + "\n");
 
     // Create a FormBody with the parameters
     FormBody formBody =
@@ -62,9 +60,8 @@ public class RestJobActivitiesImpl implements RestJobActivities {
 
   @Override
   public JobState awaitJobCompletion(String id) {
-    log.info("Activity AwaitJobCompletion: " + id + "\n");
     String url = ServerInfo.getWebServerURL() + "/job/" + id;
-    log.info("\n\nURL: " + url + "\n");
+    log.info("\n\nWaiting for job " + id + " to complete. URL: " + url + "\n");
 
     // Build the request with GET method
     Request request = new Request.Builder().url(url).get().build();
@@ -84,8 +81,8 @@ public class RestJobActivitiesImpl implements RestJobActivities {
 
         isRunning = jobStateResponse.getJobRunStatus() == JobRunStatus.RUNNING;
 
-        System.out.println("Job Status: " + jobStateResponse);
-        System.out.println("Is Running: " + isRunning);
+        //        System.out.println("Job Status: " + jobStateResponse);
+        //        System.out.println("Is Running: " + isRunning);
 
         // heartbeat to prevent activity timeout then sleep
         context.heartbeat(jobStateResponse);

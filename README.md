@@ -4,7 +4,8 @@ The primary purpose of this PoC is to demonstrate the ability of  [Temporal](htt
 
 ### TODO
 - [X] Legacy Job Service
-- [ ] Temporal Workflow
+- [X] Temporal Workflow
+  - [ ] Complete workflow job order to spec
 
 ## Legacy Workflow Orchestrator
 

@@ -11,7 +11,7 @@ public class Job {
 
   public Job(String type, int stepLength, int totalSteps) {
     this.jobData = new JobData(type, stepLength, totalSteps);
-    this.jobData.setId(JobData.generateId());
+    this.jobData.setId(JobData.generateId(type));
     this.jobState = new JobState(this.jobData.getId(), 0, totalSteps);
     this.stepState = 0;
   }

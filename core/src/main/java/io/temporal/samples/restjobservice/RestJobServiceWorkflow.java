@@ -21,9 +21,10 @@ package io.temporal.samples.restjobservice;
 
 import com.example.job.service.dataclasses.JobState;
 import io.temporal.workflow.*;
+import java.util.List;
 
 @WorkflowInterface
 public interface RestJobServiceWorkflow {
   @WorkflowMethod(name = "restJobService")
-  JobState[] restJobService();
+  List<JobState> restJobService();
 }

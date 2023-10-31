@@ -22,9 +22,12 @@ package io.temporal.samples.restjobservice;
 import com.example.job.service.dataclasses.JobData;
 import com.example.job.service.dataclasses.JobState;
 import io.temporal.activity.ActivityOptions;
-import io.temporal.samples.restjobservice.dataclasses.*;
+import io.temporal.workflow.Async;
+import io.temporal.workflow.Promise;
 import io.temporal.workflow.Workflow;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,23 +44,41 @@ public class RestJobServiceWorkflowImpl implements RestJobServiceWorkflow {
       Workflow.newActivityStub(RestJobActivities.class, options);
 
   @Override
-  public JobState[] restJobService() {
+  public List<JobState> restJobService() {
 
-    JobState[] jobStates = new JobState[1];
+    List<JobState> jobStates = new ArrayList<>();
 
-    JobData jobAData = new JobData("jobA", 1, 15);
+    List<Promise<JobState>> parallelJobs = new ArrayList<>();
 
-    // run activity createJob
+    JobData jobAData = new JobData("AAA", 1, 10);
+
+    // Parallel execution of Job A and B
+
     String jobAid = restJobActivities.createJob(jobAData);
-    log.info("Job Status from workflow: " + jobAid + "\n");
+    log.info("\n\nJob created: " + jobAid + "\n");
+
+    JobData jobBData = new JobData("BBB", 1, 10);
 
     // run activity createJob
-    JobState jobAResult = restJobActivities.awaitJobCompletion(jobAid);
-    log.info("Job result from workflow: " + jobAResult + "\n");
-    log.info("Job result from workflow: " + jobAResult.getJobRunStatus() + "\n");
+    String jobBid = restJobActivities.createJob(jobBData);
+    log.info("\n\nJob created: " + jobAid + "\n");
 
-    // add job to jobStates
-    jobStates[0] = jobAResult;
+    // Job A await
+    Promise<JobState> jobAactivity = Async.function(restJobActivities::awaitJobCompletion, jobAid);
+    parallelJobs.add(jobAactivity);
+
+    // Job B await
+    Promise<JobState> jobBactivity = Async.function(restJobActivities::awaitJobCompletion, jobBid);
+    parallelJobs.add(jobBactivity);
+
+    // Wait for both Job A and Job B to complete
+    Promise.allOf(parallelJobs).get();
+
+    for (Promise<JobState> jobResult : parallelJobs) {
+      JobState jobResultState = jobResult.get();
+      log.info("\n\nJob " + jobResultState.getId() + " COMPLETE\n");
+      jobStates.add(jobResultState);
+    }
 
     log.info("Workflow Complete\n");
     return jobStates;
