@@ -1,8 +1,11 @@
-# Money Transfer Example
+# Temporal REST Job Service
 
-TODO [Temporal](https://temporal.io) using the Java SDK.
+The primary purpose of this PoC is to demonstrate the ability of  [Temporal](https://temporal.io) to integrate with legacy orchestration systems.
 
-### Legacy Workflow Orchestrator
+### TODO
+- write a workflow that uses the legacy job service
+
+## Legacy Workflow Orchestrator
 
 #### Run the legacy Job Service Orchestrator Server
 ```bash
@@ -17,7 +20,9 @@ Submitting the form will return an ID you can use: `http://localhost:7070/job/<I
 ./gradlew -q execute -PmainClass=com.example.job.service.Main
 ````
 
-## Configuration
+## Temporal
+
+### Configuration
 
 The sample is configured by default to connect to a [local Temporal Server](https://docs.temporal.io/cli#starting-the-temporal-server) running on localhost:7233.
 
@@ -35,11 +40,8 @@ TEMPORAL_KEY_PATH="/path/to/file.key"
 export TEMPORAL_REST_JOB_SERVICE_TASKQUEUE="RestJobService"
 ```
 
-## Run a Workflow
+### Run a Workflow
 
 Note: Use a Java 18 SDK.
 
 Start a worker: TODO
-
-## TODO
-- write a workflow that uses the legacy job service
