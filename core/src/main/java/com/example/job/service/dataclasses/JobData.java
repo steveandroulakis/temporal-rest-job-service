@@ -1,6 +1,7 @@
 package com.example.job.service.dataclasses;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import java.util.UUID;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class JobData {
@@ -9,8 +10,8 @@ public class JobData {
   private int stepLength;
   private int steps;
 
-  public JobData(String id, String type, int stepLength, int steps) {
-    this.id = id;
+  public JobData(String type, int stepLength, int steps) {
+    this.id = this.generateId();
     this.type = type;
     this.stepLength = stepLength;
     this.steps = steps;
@@ -48,5 +49,9 @@ public class JobData {
 
   public void setSteps(int steps) {
     this.steps = steps;
+  }
+
+  private String generateId() {
+    return UUID.randomUUID().toString().substring(0, 6);
   }
 }

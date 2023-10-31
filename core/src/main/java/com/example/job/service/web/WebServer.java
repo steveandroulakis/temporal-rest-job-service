@@ -34,24 +34,15 @@ public class WebServer {
   private static final HashMap<String, Job> jobMap = new HashMap<>();
   private static final ExecutorService executorService = Executors.newCachedThreadPool();
 
-  public static void main(String[] args) {
-    Javalin app = Javalin.create();
-
-    app.get(
-        "/serverinfo",
-        ctx -> {
-          // some code
-          ctx.json(ServerInfo.getServerInfo());
-        });
-
-    app.post("/job", WebServer::createJob);
-    app.get("/job/:id", WebServer::getJobStatus);
-  }
-
   @SuppressWarnings("FutureReturnValueIgnored")
   private static void createJob(Context ctx) {
-    // Assume you have a method to deserialize payload into JobData, you could use Jackson
-    JobData jobData = ctx.bodyAsClass(JobData.class);
+    String type = ctx.formParam("type");
+    int stepLength = Integer.parseInt(ctx.formParam("stepLength")); // Providing a default value
+    int steps = Integer.parseInt(ctx.formParam("steps")); // Providing a default value
+
+    // Create a new JobData object with these parameters
+    JobData jobData = new JobData(type, stepLength, steps);
+
     Job newJob = new Job(jobData.getType(), jobData.getStepLength(), jobData.getSteps());
     jobMap.put(newJob.getJobData().getId(), newJob);
     executorService.submit(
@@ -73,5 +64,42 @@ public class WebServer {
     } else {
       ctx.status(404); // Job not found
     }
+  }
+
+  public static void main(String[] args) {
+    Javalin app = Javalin.create();
+
+    app.get(
+        "/",
+        ctx -> {
+          ctx.html(
+              "<!DOCTYPE html>"
+                  + "<html>"
+                  + "<body>"
+                  + "<h2>Create Job</h2>"
+                  + "<form action=\"/job\" method=\"post\">"
+                  + "  Job Name:<br>"
+                  + "  <input type=\"text\" name=\"type\"><br><br>"
+                  + "  Number of Steps:"
+                  + "  <input type=\"number\" name=\"steps\" name=\"Total Steps\">"
+                  + "  Step Length (seconds):"
+                  + "  <input type=\"number\" name=\"stepLength\"><br><br>"
+                  + "  <input type=\"submit\" value=\"Submit\">"
+                  + "</form>"
+                  + "</body>"
+                  + "</html>");
+        });
+
+    app.get(
+        "/serverinfo",
+        ctx -> {
+          // some code
+          ctx.json(ServerInfo.getServerInfo());
+        });
+
+    app.post("/job", WebServer::createJob);
+    app.get("/job/{id}", WebServer::getJobStatus);
+
+    app.start(7070);
   }
 }

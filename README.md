@@ -2,6 +2,21 @@
 
 TODO [Temporal](https://temporal.io) using the Java SDK.
 
+### Legacy Workflow Orchestrator
+
+#### Run the legacy Job Service Orchestrator Server
+```bash
+./gradlew -q execute -PmainClass=com.example.job.service.web.WebServer
+````
+
+Navigate to `http://localhost:7070/`
+Submitting the form will return an ID you can use: `http://localhost:7070/job/<ID>`
+
+#### Run a Legacy Job directly (without a Temporal Workflow or jobs WebServer)
+```bash
+./gradlew -q execute -PmainClass=com.example.job.service.Main
+````
+
 ## Configuration
 
 The sample is configured by default to connect to a [local Temporal Server](https://docs.temporal.io/cli#starting-the-temporal-server) running on localhost:7233.
@@ -24,16 +39,7 @@ export TEMPORAL_REST_JOB_SERVICE_TASKQUEUE="RestJobService"
 
 Note: Use a Java 18 SDK.
 
-Start a worker:
-
-TODO navigate to `http://localhost:7070/`
-
-#### Sample Text
-Run a Job directly (without a Temporal Workflow or jobs WebServer)
-```bash
-# where TRANSFER-EZF-249 is the workflowId
-./gradlew -q execute -PmainClass=com.example.job.service.Main
-````
+Start a worker: TODO
 
 ## TODO
-- _placeholder_
+- write a workflow that uses the legacy job service

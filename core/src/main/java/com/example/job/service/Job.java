@@ -2,7 +2,6 @@ package com.example.job.service;
 
 import com.example.job.service.dataclasses.JobData;
 import com.example.job.service.dataclasses.JobState;
-import java.util.UUID;
 
 public class Job {
   private JobData jobData;
@@ -10,13 +9,9 @@ public class Job {
   private int stepState;
 
   public Job(String type, int stepLength, int steps) {
-    this.jobData = new JobData(generateId(), type, stepLength, steps);
+    this.jobData = new JobData(type, stepLength, steps);
     this.jobState = JobState.Running;
     this.stepState = 0;
-  }
-
-  private String generateId() {
-    return "job-" + UUID.randomUUID().toString().substring(0, 6);
   }
 
   public JobData getJobData() {
@@ -24,17 +19,17 @@ public class Job {
   }
 
   public void run() throws InterruptedException {
-    System.out.println("Running job " + jobData.getId());
-    System.out.println("Data " + this.getJobDataAsJson());
+    System.out.println("Running Job: " + jobData.getId());
+    System.out.println("Data: " + this.getJobDataAsJson());
 
     for (int i = 0; i < jobData.getSteps(); i++) {
       // get job status
       stepState = i;
       Thread.sleep((long) jobData.getStepLength() * 1000);
-      System.out.println("Job Status " + this.getStateAsJson());
+      System.out.println("Job Status: " + this.getStateAsJson());
     }
     jobState = JobState.Finished;
-    System.out.println("Job Status " + this.getStateAsJson());
+    System.out.println("Job Status: " + this.getStateAsJson());
   }
 
   // get jobData as JSON
