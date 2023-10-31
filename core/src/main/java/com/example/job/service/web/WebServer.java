@@ -53,14 +53,14 @@ public class WebServer {
             ctx.status(500);
           }
         });
-    ctx.json(newJob.getJobData().getId()); // Respond with the Job ID
+    ctx.json(newJob.getJobData()); // Respond with the Job ID
   }
 
   private static void getJobStatus(Context ctx) {
     String id = ctx.pathParam("id");
     Job job = jobMap.get(id);
     if (job != null) {
-      ctx.json(job.getStateAsJson()); // Return the Job status as JSON
+      ctx.json(job.getJobState()); // Return the Job status as JSON
     } else {
       ctx.status(404); // Job not found
     }

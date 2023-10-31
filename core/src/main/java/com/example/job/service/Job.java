@@ -1,6 +1,7 @@
 package com.example.job.service;
 
 import com.example.job.service.dataclasses.JobData;
+import com.example.job.service.dataclasses.JobRunStatus;
 import com.example.job.service.dataclasses.JobState;
 
 public class Job {
@@ -8,9 +9,9 @@ public class Job {
   private JobState jobState;
   private int stepState;
 
-  public Job(String type, int stepLength, int steps) {
-    this.jobData = new JobData(type, stepLength, steps);
-    this.jobState = JobState.Running;
+  public Job(String type, int stepLength, int totalSteps) {
+    this.jobData = new JobData(type, stepLength, totalSteps);
+    this.jobState = new JobState(this.jobData.getId(), 0, totalSteps);
     this.stepState = 0;
   }
 
@@ -18,35 +19,28 @@ public class Job {
     return this.jobData;
   }
 
+  public JobState getJobState() {
+    return this.jobState;
+  }
+
   public void run() throws InterruptedException {
-    System.out.println("Running Job: " + jobData.getId());
-    System.out.println("Data: " + this.getJobDataAsJson());
+    System.out.println(
+        "Running Job: "
+            + jobData.getId()
+            + " over "
+            + (jobData.getSteps() * jobData.getStepLength())
+            + " seconds");
+    System.out.println("Data: " + this.getJobData());
 
     for (int i = 0; i < jobData.getSteps(); i++) {
       // get job status
       stepState = i;
       Thread.sleep((long) jobData.getStepLength() * 1000);
-      System.out.println("Job Status: " + this.getStateAsJson());
+      this.getJobState().setStepState(stepState);
+      System.out.println("Job Status: " + this.getJobState());
     }
-    jobState = JobState.Finished;
-    System.out.println("Job Status: " + this.getStateAsJson());
-  }
-
-  // get jobData as JSON
-  public String getJobDataAsJson() {
-    return "{\"id\":\""
-        + this.jobData.getId()
-        + "\",\"type\":\""
-        + this.jobData.getType()
-        + "\",\"stepLength\":"
-        + this.jobData.getStepLength()
-        + ",\"steps\":"
-        + this.jobData.getSteps()
-        + "}";
-  }
-
-  // get jobState and stepState as JSON
-  public String getStateAsJson() {
-    return "{\"jobState\":\"" + this.jobState + "\",\"stepState\":" + this.stepState + "}";
+    this.getJobState().setJobRunStatus(JobRunStatus.FINISHED);
+    this.jobState = this.getJobState();
+    System.out.println("Job Status: " + this.getJobState());
   }
 }
