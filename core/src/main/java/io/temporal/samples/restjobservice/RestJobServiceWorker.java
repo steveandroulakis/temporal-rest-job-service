@@ -19,7 +19,7 @@
 
 package io.temporal.samples.restjobservice;
 
-import io.temporal.samples.restjobservice.web.ServerInfo;
+import com.example.job.service.web.ServerInfo;
 import io.temporal.worker.Worker;
 import io.temporal.worker.WorkerFactory;
 

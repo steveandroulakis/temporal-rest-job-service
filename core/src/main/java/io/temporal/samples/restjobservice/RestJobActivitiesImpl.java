@@ -19,17 +19,8 @@
 
 package io.temporal.samples.restjobservice;
 
-import io.temporal.activity.Activity;
-import io.temporal.activity.ActivityExecutionContext;
-import io.temporal.activity.ActivityInfo;
-import io.temporal.failure.ApplicationFailure;
-import io.temporal.samples.restjobservice.dataclasses.ChargeResponseObj;
-import io.temporal.samples.restjobservice.dataclasses.ExecutionScenarioObj;
-import io.temporal.samples.restjobservice.web.ServerInfo;
-import java.io.IOException;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import com.example.job.service.dataclasses.JobData;
+import com.example.job.service.dataclasses.JobStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,42 +28,19 @@ public class RestJobActivitiesImpl implements RestJobActivities {
   private static final Logger log = LoggerFactory.getLogger(RestJobActivitiesImpl.class);
 
   @Override
-  public ChargeResponseObj createJob(
-      String idempotencyKey, float amountDollars, ExecutionScenarioObj scenario) {
-
-    log.info("\n\nCalled API /charge\n");
-
-    ActivityExecutionContext ctx = Activity.getExecutionContext();
-    ActivityInfo info = ctx.getInfo();
-
-    if (scenario == ExecutionScenarioObj.API_DOWNTIME) {
-      log.info("\n\n*** Simulating API Downtime\n");
-      if (info.getAttempt() < 5) {
-        log.info("\n*** Activity Attempt: #" + info.getAttempt() + "***\n");
-        int delaySeconds = 7;
-        log.info("\n\n/API/simulateDelay Seconds" + delaySeconds + "\n");
-        simulateDelay(delaySeconds);
-      }
-    }
-
-    if (scenario == ExecutionScenarioObj.INSUFFICIENT_FUNDS) {
-      throw ApplicationFailure.newNonRetryableFailure(
-          "Insufficient Funds", "createCharge Activity Failed");
-    }
-
-    ChargeResponseObj response = new ChargeResponseObj("example-charge-id");
-
-    return response;
+  public JobStatus createJob(JobData jobData) {
+    log.info("createJob: " + jobData.getId() + "\n");
+    return null;
   }
 
-  private static String simulateDelay(int seconds) {
-    String url = ServerInfo.getWebServerURL() + "/simulateDelay?s=" + seconds;
-    log.info("\n\n/API/simulateDelay URL: " + url + "\n");
-    Request request = new Request.Builder().url(url).build();
-    try (Response response = new OkHttpClient().newCall(request).execute()) {
-      return response.body().string();
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
-  }
+  //  private static String simulateDelay(int seconds) {
+  //    String url = ServerInfo.getWebServerURL() + "/simulateDelay?s=" + seconds;
+  //    log.info("\n\n/API/simulateDelay URL: " + url + "\n");
+  //    Request request = new Request.Builder().url(url).build();
+  //    try (Response response = new OkHttpClient().newCall(request).execute()) {
+  //      return response.body().string();
+  //    } catch (IOException e) {
+  //      throw new RuntimeException(e);
+  //    }
+  //  }
 }

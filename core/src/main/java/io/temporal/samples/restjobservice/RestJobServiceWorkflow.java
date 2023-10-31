@@ -19,12 +19,11 @@
 
 package io.temporal.samples.restjobservice;
 
-import io.temporal.samples.restjobservice.dataclasses.ResultObj;
 import io.temporal.samples.restjobservice.dataclasses.WorkflowParameterObj;
 import io.temporal.workflow.*;
 
 @WorkflowInterface
 public interface RestJobServiceWorkflow {
   @WorkflowMethod(name = "restJobService")
-  ResultObj restJobService(WorkflowParameterObj params);
+  String restJobService(WorkflowParameterObj params);
 }

@@ -19,8 +19,8 @@
 
 package io.temporal.samples.restjobservice;
 
+import com.example.job.service.dataclasses.JobStatus;
 import io.temporal.activity.ActivityOptions;
-import io.temporal.failure.ApplicationFailure;
 import io.temporal.samples.restjobservice.dataclasses.*;
 import io.temporal.workflow.Workflow;
 import java.time.Duration;
@@ -36,67 +36,14 @@ public class RestJobServiceWorkflowImpl implements RestJobServiceWorkflow {
   private final RestJobActivities restJobActivities =
       Workflow.newActivityStub(RestJobActivities.class, options);
 
-  private int progressPercentage = 10;
-  private String transferState = "starting";
-
-  private ChargeResponseObj chargeResult = new ChargeResponseObj("");
-
-  private int approvalTime = 30;
-
-  private boolean approved = false;
-
   @Override
-  public ResultObj restJobService(WorkflowParameterObj params) {
-
-    progressPercentage = 25;
-
-    Workflow.sleep(Duration.ofSeconds(10));
-
-    progressPercentage = 50;
-    transferState = "running";
-
-    // Wait for approval
-    if (params.getScenario() == ExecutionScenarioObj.HUMAN_IN_LOOP) {
-      log.info(
-          "\n\nWaiting on 'approveTransfer' Signal or Update for workflow ID: "
-              + Workflow.getInfo().getWorkflowId()
-              + "\n\n");
-      transferState = "waiting";
-
-      // Wait for the approval signal for up to approvalTime
-      boolean receivedSignal = Workflow.await(Duration.ofSeconds(approvalTime), () -> approved);
-
-      // If the signal was not received within the timeout, fail the workflow
-      if (!receivedSignal) {
-        log.error(
-            "Approval not received within the "
-                + approvalTime
-                + "-second time window: "
-                + "Failing the workflow.");
-        throw ApplicationFailure.newFailure(
-            "Approval not received within " + approvalTime + " seconds", "ApprovalTimeout");
-      }
-    }
-
-    // Simulate bug in workflow
-    if (params.getScenario() == ExecutionScenarioObj.BUG_IN_WORKFLOW) {
-      log.info("\n\nSimulating workflow task failure.\n\n");
-      throw new RuntimeException("simulated"); // comment out to fix the workflow
-    }
-
-    transferState = "running";
+  public String restJobService(WorkflowParameterObj params) {
 
     // run activity
-    String idempotencyKey = Workflow.randomUUID().toString();
-    chargeResult =
-        restJobActivities.createJob(idempotencyKey, params.getAmount(), params.getScenario());
+    JobStatus jobStatus = restJobActivities.createJob(params.getJobData());
+    log.info("Job Status: " + jobStatus + "\n");
 
-    progressPercentage = 80;
-    Workflow.sleep(Duration.ofSeconds(3));
-
-    progressPercentage = 100;
-    transferState = "finished";
-
-    return new ResultObj(chargeResult);
+    log.info("Workflow Complete\n");
+    return "COMPLETE";
   }
 }

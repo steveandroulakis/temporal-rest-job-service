@@ -19,42 +19,24 @@
 
 package io.temporal.samples.restjobservice.dataclasses;
 
+import com.example.job.service.dataclasses.JobData;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class WorkflowParameterObj {
   // in cents
-  private int amount;
-
-  private ExecutionScenarioObj scenario;
+  private JobData jobData;
 
   // No-arg constructor
   public WorkflowParameterObj() {}
 
   // Constructor
   @JsonCreator
-  public WorkflowParameterObj(
-      @JsonProperty("amountCents") int amount,
-      @JsonProperty("scenario") ExecutionScenarioObj scenario) {
-    this.amount = amount;
-    this.scenario = scenario;
+  public WorkflowParameterObj(@JsonProperty("jobData") JobData jobData) {
+    this.jobData = jobData;
   }
 
-  // Getters
-  public int getAmount() {
-    return amount;
-  }
-
-  public ExecutionScenarioObj getScenario() {
-    return scenario;
-  }
-
-  // Setters
-  public void setAmount(int amount) {
-    this.amount = amount;
-  }
-
-  public void setScenario(ExecutionScenarioObj scenario) {
-    this.scenario = scenario;
+  public JobData getJobData() {
+    return jobData;
   }
 }

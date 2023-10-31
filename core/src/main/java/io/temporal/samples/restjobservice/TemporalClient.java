@@ -19,6 +19,7 @@
 
 package io.temporal.samples.restjobservice;
 
+import com.example.job.service.web.ServerInfo;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowClientOptions;
 import io.temporal.client.schedules.ScheduleClient;
@@ -26,7 +27,6 @@ import io.temporal.client.schedules.ScheduleClientOptions;
 import io.temporal.common.converter.CodecDataConverter;
 import io.temporal.common.converter.DefaultDataConverter;
 import io.temporal.samples.restjobservice.dataconverter.CryptCodec;
-import io.temporal.samples.restjobservice.web.ServerInfo;
 import io.temporal.serviceclient.SimpleSslContextBuilder;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.serviceclient.WorkflowServiceStubsOptions;

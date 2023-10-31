@@ -19,12 +19,11 @@
 
 package io.temporal.samples.restjobservice;
 
+import com.example.job.service.dataclasses.JobData;
+import com.example.job.service.dataclasses.JobStatus;
 import io.temporal.activity.ActivityInterface;
-import io.temporal.samples.restjobservice.dataclasses.ChargeResponseObj;
-import io.temporal.samples.restjobservice.dataclasses.ExecutionScenarioObj;
 
 @ActivityInterface
 public interface RestJobActivities {
-  ChargeResponseObj createJob(
-      String idempotencyKey, float amountDollars, ExecutionScenarioObj scenario);
+  JobStatus createJob(JobData jobData);
 }

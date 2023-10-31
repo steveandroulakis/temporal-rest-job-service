@@ -17,7 +17,7 @@
  *  permissions and limitations under the License.
  */
 
-package io.temporal.samples.restjobservice.web;
+package com.example.job.service.web;
 
 import java.util.HashMap;
 import java.util.Map;
