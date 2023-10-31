@@ -10,17 +10,14 @@ The primary purpose of this PoC is to demonstrate the ability of  [Temporal](htt
 ## Legacy Workflow Orchestrator
 
 #### Run the legacy Job Service Orchestrator Server
+You will need to run the RESTful job server so your Temporal workflow can interact with it.
 ```bash
 ./gradlew -q execute -PmainClass=com.example.job.service.web.WebServer
-````
+```
 
+**Debug View of Job System**
 Navigate to `http://localhost:7070/`
 Submitting the form will return an ID you can use: `http://localhost:7070/job/<ID>`
-
-#### Run a Legacy Job directly (without a Temporal Workflow or jobs WebServer)
-```bash
-./gradlew -q execute -PmainClass=com.example.job.service.Main
-````
 
 ## Temporal
 
