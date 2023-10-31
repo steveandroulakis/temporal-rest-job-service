@@ -20,9 +20,12 @@
 package io.temporal.samples.restjobservice;
 
 import com.example.job.service.dataclasses.JobData;
+import com.example.job.service.dataclasses.JobRunStatus;
 import com.example.job.service.dataclasses.JobState;
 import com.example.job.service.web.ServerInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.temporal.activity.Activity;
+import io.temporal.activity.ActivityExecutionContext;
 import java.io.IOException;
 import okhttp3.*;
 import org.slf4j.Logger;
@@ -66,15 +69,34 @@ public class RestJobActivitiesImpl implements RestJobActivities {
     // Build the request with GET method
     Request request = new Request.Builder().url(url).get().build();
 
-    try (Response response = new OkHttpClient().newCall(request).execute()) {
-      // Get JSON JobState from response and convert to JobState object
-      String jsonStr = response.body().string();
-      ObjectMapper objectMapper = new ObjectMapper();
-      JobState jobStateResponse = objectMapper.readValue(jsonStr, JobState.class);
+    ActivityExecutionContext context = Activity.getExecutionContext();
 
-      return jobStateResponse;
-    } catch (IOException e) {
-      throw new RuntimeException(e);
+    boolean isRunning = true;
+    JobState jobStateResponse = null;
+
+    while (isRunning) {
+
+      try (Response response = new OkHttpClient().newCall(request).execute()) {
+        // Get JSON JobState from response and convert to JobState object
+        String jsonStr = response.body().string();
+        ObjectMapper objectMapper = new ObjectMapper();
+        jobStateResponse = objectMapper.readValue(jsonStr, JobState.class);
+
+        isRunning = jobStateResponse.getJobRunStatus() == JobRunStatus.RUNNING;
+
+        System.out.println("Job Status: " + jobStateResponse);
+        System.out.println("Is Running: " + isRunning);
+
+        // heartbeat to prevent activity timeout then sleep
+        context.heartbeat(jobStateResponse);
+        Thread.sleep((long) 2000);
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      } catch (InterruptedException e) {
+        throw new RuntimeException(e);
+      }
     }
+
+    return jobStateResponse;
   }
 }

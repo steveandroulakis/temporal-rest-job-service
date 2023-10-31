@@ -32,7 +32,10 @@ public class RestJobServiceWorkflowImpl implements RestJobServiceWorkflow {
 
   private static final Logger log = LoggerFactory.getLogger(RestJobServiceWorkflowImpl.class);
   private final ActivityOptions options =
-      ActivityOptions.newBuilder().setStartToCloseTimeout(Duration.ofSeconds(5)).build();
+      ActivityOptions.newBuilder()
+          .setStartToCloseTimeout(Duration.ofHours(1))
+          .setHeartbeatTimeout(Duration.ofSeconds(10))
+          .build();
 
   private final RestJobActivities restJobActivities =
       Workflow.newActivityStub(RestJobActivities.class, options);
@@ -42,7 +45,7 @@ public class RestJobServiceWorkflowImpl implements RestJobServiceWorkflow {
 
     JobState[] jobStates = new JobState[1];
 
-    JobData jobAData = new JobData("jobA", 1, 10);
+    JobData jobAData = new JobData("jobA", 1, 15);
 
     // run activity createJob
     String jobAid = restJobActivities.createJob(jobAData);
