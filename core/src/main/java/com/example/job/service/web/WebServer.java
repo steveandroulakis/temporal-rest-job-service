@@ -69,7 +69,7 @@ public class WebServer {
     String id = ctx.pathParam("id");
     Job job = jobMap.get(id);
     if (job != null) {
-      ctx.json(job.getStatus()); // Return the Job status as JSON
+      ctx.json(job.getStateAsJson()); // Return the Job status as JSON
     } else {
       ctx.status(404); // Job not found
     }

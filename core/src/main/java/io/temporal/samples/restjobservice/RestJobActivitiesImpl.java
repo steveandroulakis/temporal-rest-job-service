@@ -20,7 +20,6 @@
 package io.temporal.samples.restjobservice;
 
 import com.example.job.service.dataclasses.JobData;
-import com.example.job.service.dataclasses.JobStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +27,7 @@ public class RestJobActivitiesImpl implements RestJobActivities {
   private static final Logger log = LoggerFactory.getLogger(RestJobActivitiesImpl.class);
 
   @Override
-  public JobStatus createJob(JobData jobData) {
+  public String createJob(JobData jobData) {
     log.info("createJob: " + jobData.getId() + "\n");
     return null;
   }

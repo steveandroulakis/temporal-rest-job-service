@@ -29,12 +29,10 @@ Start a worker:
 TODO navigate to `http://localhost:7070/`
 
 #### Sample Text
-The transfer will pause and wait for approval. If the user doesn't approve the transfer within a set time, the workflow will fail.
-
-Approve a transfer using **Signals**
+Run a Job directly (without a Temporal Workflow or jobs WebServer)
 ```bash
 # where TRANSFER-EZF-249 is the workflowId
-./gradlew -q execute -PmainClass=io.temporal.samples.restjobservice.TransferApprover -Parg=TRANSFER-XXX-XXX
+./gradlew -q execute -PmainClass=com.example.job.service.Main
 ````
 
 ## TODO

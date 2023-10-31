@@ -20,10 +20,9 @@
 package io.temporal.samples.restjobservice;
 
 import com.example.job.service.dataclasses.JobData;
-import com.example.job.service.dataclasses.JobStatus;
 import io.temporal.activity.ActivityInterface;
 
 @ActivityInterface
 public interface RestJobActivities {
-  JobStatus createJob(JobData jobData);
+  String createJob(JobData jobData);
 }
