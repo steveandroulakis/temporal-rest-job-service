@@ -68,4 +68,4 @@ export TEMPORAL_REST_JOB_SERVICE_TASKQUEUE="RestJobService"
 ./gradlew -q execute -PmainClass=io.temporal.samples.restjobservice.RestJobServiceRequester
 ```
 
-Note: This sample was build for Java 18.
+Note: This sample was built for Java 18.
