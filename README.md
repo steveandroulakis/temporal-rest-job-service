@@ -1,11 +1,21 @@
 # Temporal REST Job Service
 
-The primary purpose of this PoC is to demonstrate the ability of  [Temporal](https://temporal.io) to integrate with legacy orchestration systems.
+The primary purpose of this sample is to demonstrate the ability of  [Temporal](https://temporal.io) to integrate with legacy orchestration systems.
 
-### TODO
-- [X] Legacy Job Service
-- [X] Temporal Workflow
-  - [ ] Complete workflow job order to spec
+![Timeline](./timeline.png)
+_Temporal Timeline view of legacy system job execution_
+
+---
+
+![Timeline](./history.png)
+_Temporal Event history view of legacy system job execution_
+
+## Running the Sample
+Full instructions below, but here's a summary of the steps to run the demo:
+1. Start the legacy Job Service Orchestrator Server
+2. Start a Temporal Worker
+3. Start a Temporal Workflow
+
 
 ## Legacy Workflow Orchestrator
 

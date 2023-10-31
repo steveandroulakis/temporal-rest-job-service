@@ -33,7 +33,8 @@ public class RestJobServiceWorker {
     // worker factory that can be used to create workers for specific task queues
     WorkerFactory factory = WorkerFactory.newInstance(TemporalClient.get());
     Worker workerForCommonTaskQueue = factory.newWorker(TASK_QUEUE);
-    workerForCommonTaskQueue.registerWorkflowImplementationTypes(RestJobServiceWorkflowImpl.class);
+    workerForCommonTaskQueue.registerWorkflowImplementationTypes(
+        RestJobServiceWorkflowImpl.class, RestJobServiceChildWorkflowImpl.class);
     RestJobActivities restJobActivities = new RestJobActivitiesImpl();
     workerForCommonTaskQueue.registerActivitiesImplementations(restJobActivities);
     // Start all workers created by this factory.
